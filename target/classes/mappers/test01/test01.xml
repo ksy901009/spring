@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org/DTO Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="test01">
+	<sql id="search">
+		<if test="search_option != null and search_data != null and search_option != '' and search_data != ''">
+			<choose>
+				<when test="search_option == 'name' or search_option == 'description'">
+					and ${search_option} like #{search_data} 
+				</when>
+				<when test="search_option == 'name_description'">
+					and (name like #{search_data} or description like #{search_data})
+				</when>
+			</choose>
+		</if>
+	</sql>
+
+	<select id="test" resultType="int">
+		select 10 from dual 
+	</select>
+</mapper>

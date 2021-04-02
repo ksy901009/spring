@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org/DTO Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="member">
+	<sql id="search">
+		<choose>
+			<when test="search_option == 'id_name_gender'">
+				and (id like '%' || #{search_data} || '%' or
+					name like '%' || #{search_data} || '%' or
+					gender like '%' || #{search_data} || '%')
+			</when>
+			<when test="search_option != null and search_option != '' and search_data != null and search_data != ''">
+				and (${search_option} like '%' || #{search_data} || '%')
+			</when>
+			<otherwise>
+				and no > '0'
+			</otherwise>
+		</choose>
+	</sql>
+
+	<select id="getListAll" resultType="com.test.spring01.member.model.dto.MemberDTO">
+		select * from member order by name
+	</select>
+
+	<select id="getTotalRecord" resultType="int">
+		select count(*) from member where 1=1
+	</select>
+	
+	<select id="getSelectOne" resultType="com.test.spring01.member.model.dto.MemberDTO">
+		select * from member where id = #{dto.id}
+	</select>
+	
+	<insert id="insertMember">
+		insert into member
+		(id, passwd, name, email)
+		values
+		(#{dto.id}, #{dto.passwd}, #{dto.name}, #{dto.email})
+	</insert>
+	
+	<update id="updateMember">
+		update member set
+		email = #{dto.email} where id = #{dto.id}
+	</update>
+	
+	<delete id="deleteMember">
+		delete from member where id = #{dto.id}
+	</delete>
+</mapper>
